@@ -1,0 +1,169 @@
+name: redshift-apb
+image: ansibleplaybookbundle/redshift-apb
+description: 'Managed redshift cluster'
+tags:
+  - amazon
+  - redshift
+bindable: true
+async: optional
+plans:
+  - name: default
+    description: 'Managed redshift cluster'
+    free: false
+    parameters:
+      - name: stack_identifier
+        required: true
+        title: Unique Stack Identifier
+        description: 'Unique identifier to be included in the CloudFormation Stack Name to prevent naming collisions. Must only contain alphanumeric characters and hyphens. (e.g. "sample-redshift-stack", "production-redshift-09-2017")'
+        type: string
+      - name: aws_access_key
+        required: true
+        title: AWS Access Key
+        description: 'AWS Access Key to authenticate to AWS with.'
+        type: string
+      - name: aws_secret_key
+        required: true
+        title: AWS Secret Key
+        description: 'AWS Secret Key to authenticate to AWS with.'
+        type: string
+      - name: region
+        required: true
+        title: AWS Region
+        description: 'AWS Region to create RDS instance in.'
+        type: string
+        default: "us-west-2"
+      - name: ApplicationName
+        required: true
+        title: Application Name
+        description: 'Redshift Application name'
+        type: string
+      - name: DBName
+        required: true
+        title: DB Name
+        description: 'The name of the database to create when the Redshift cluster is created. (letters and numbers, max 64 chars)'
+        type: string
+        default: "DWDB1"
+      - name: VpcId
+        required: true
+        title: VPC ID
+        description: 'VPC ID (e.g. "vpc-6c9f1a0b")'
+        type: string
+      - name: BackupRetentionPeriod
+        required: true
+        title: Backup Retention Period
+        description: 'The number of days during which automatic Backups are retained. Setting 0 disables automatic snapshots, maximum value is 35.'
+        type: int
+        default: 35
+      - name: PortNumber
+        required: true
+        title: Port Number
+        description: 'The port number for the database server to listen on. (values in range 1150-65535)'
+        type: int
+        default: 5439
+      - name: PubliclyAccessible
+        required: true
+        title: Publicly Accessible
+        description: 'Indicates whether the DB instance is an Internet-facing instance. (values: "true", "false")'
+        type: string
+        default: "false"
+      - name: PreferredMaintenanceWindowDay
+        required: true
+        title: Day of Preferred Maintenance Window
+        description: 'The day of the week which RedShift  maintenance will be performed (e.g. "Mon")'
+        type: string
+        default: "Mon"
+      - name: PreferredMaintenanceWindowStartTime
+        required: true
+        title: Preferred Maintenance Window Start Time
+        description: 'The weekly start time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
+        type: string
+        default: "04:00"
+      - name: PreferredMaintenanceWindowEndTime
+        required: true
+        title: Preferred Maintenance Window End Time
+        description: 'The weekly end time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
+        type: string
+        default: "06:00"
+      - name: NumberOfAvailabilityZones
+        required: true
+        title: Number of Availability Zones
+        description: 'Quantity of subnets to use, if selecting more than 2 the region this stack is in must have at least that many Availability Zones'
+        type: int
+        default: 3
+      - name: AvailabilityZones
+        required: true
+        title: Availability Zones
+        description: 'Comma separated list of availability zones to use, must be the same quantity as specified in Number of Availability Zones (e.g. "us-west-2a,us-west-2b,us-west-2c")'
+        type: string
+        default: "us-west-2a,us-west-2b,us-west-2c"
+      - name: CidrBlocks
+        required: true
+        title: CIDR Blocks
+        description: 'Comma seperated list of CIDR blocks to place RDS into, must be the same quantity as specified in Number of Availability Zones (e.g. "10.0.96.0/20,10.0.112.0/20,10.0.128.0/20")'
+        type: string
+      - name: AccessCidr
+        required: true
+        title: Access CIDR
+        description: 'CIDR block to allow to connect to database (e.g. "10.0.0.0/16")'
+        type: string
+      - name: NodeType
+        required: true
+        title: Node Type
+        description: 'The node type that is provisioned for this cluster.'
+        type: string
+        default: 'dc1.large'
+      - name: NumberOfNodes
+        required: true
+        title: Number of Nodes
+        description: 'The number of compute nodes in the cluster. If you specify multi-node for the ClusterType parameter, you must specify a number greater than 1. You can not specify this parameter for a single-node cluster. min 2 max 32 '
+        type: string
+        default: '3'
+      - name: ClusterType
+        required: true
+        title: Cluster Type
+        description: 'The type of cluster. Specify single-node or multi-node (default).  Number of nodes must be greater than 1 for multi-node'
+        type: string
+        default: 'multi-node'
+     - name: MasterUsername
+        required: true
+        title: Master User Name
+        description: 'Master database Username'
+        type: string
+        default: admin
+      - name: MasterUserPassword
+        required: true
+        title: Master User Password
+        description: 'Master user database Password'
+        type: string
+        default: Passw0rd
+      - name: AllowVersionUpgrade
+        required: true
+        title: Allow Version Upgrade
+        description: 'If you update the Engine Version property to a version that''s different from the DB instance''s current major version, set this property to true. (values: "true", "false")'
+        type: string
+        default: "true"
+      - name: StorageEncrypted
+        required: true
+        title: Storage Encrypted
+        description: 'Indicates whether the Cluster storage is encrypted. (values: "true", "false")'
+        type: string
+        default: "true"
+        - name: UseElasticIP
+        required: true
+        title: Use Elastic IP
+        description: 'For public accessable clusters which require a static IP, assign a EIP'
+        type: string
+        default: "true"
+        - name: LogBucketName
+        required: true
+        title: Log Bucket Name
+        description: 'Must be a valid S3 Bucket in same Region,if no bucket is provided audit logging will not be enabled for this cluster'
+        type: string
+        default: "true"
+
+    metadata:
+        displayName: "Amazon Redshift"
+        longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
+        imageUrl: "https://d0.awsstatic.com/cloud-storage/Deck_Databases.png"
+        documentationUrl: "https://aws.amazon.com/documentation/redshift/"
+        cost: $0.00

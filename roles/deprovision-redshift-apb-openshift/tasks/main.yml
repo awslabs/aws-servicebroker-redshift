@@ -1,0 +1,11 @@
+#############################################################################
+# Deprovision Redshift cluster
+#############################################################################
+
+- name: Remove RedShift Cluster
+  cloudformation:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    stack_name: "apb-sns-{{ stack_identifier }}"
+    state: "absent"
+    region: "{{ region }}"

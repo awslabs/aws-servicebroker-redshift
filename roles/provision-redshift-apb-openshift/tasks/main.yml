@@ -1,0 +1,17 @@
+- name: Launch RedShift
+  cloudformation:
+   aws_access_key: "{{ aws_access_key }}"
+   aws_secret_key: "{{ aws_secret_key }}"
+   stack_name: "apb-redshift-{{ stack_identifier }}"
+   state: "present"
+   region: "{{ region }}"
+   disable_rollback: false
+   template: "{{ role_path }}/files/RedShiftCluster.yml"
+   template_parameters:
+     SubscriptionEndPoint: "{{ SubscriptionEndPoint }}"
+     SubscriptionProtocol: "{{ SubscriptionProtocol }}"
+   tags:
+     Stack: "ansible-cloudformation"
+     Application: "ansible-redshift"
+     Description: "{{ ansible_user_id }} redshift {{ ApplicationName }}"
+  register: redshift
