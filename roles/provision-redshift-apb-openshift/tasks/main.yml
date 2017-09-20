@@ -1,4 +1,4 @@
-- name: Launch RedShift
+- name: Launch Redshift
   cloudformation:
    aws_access_key: "{{ aws_access_key }}"
    aws_secret_key: "{{ aws_secret_key }}"
@@ -8,10 +8,37 @@
    disable_rollback: false
    template: "{{ role_path }}/files/RedShiftCluster.yml"
    template_parameters:
-     SubscriptionEndPoint: "{{ SubscriptionEndPoint }}"
-     SubscriptionProtocol: "{{ SubscriptionProtocol }}"
+     ApplicationName: "{{ ApplicationName }}"
+     VpcId: "{{ VpcId }}"
+     NumberOfAvailabilityZones: "{{ NumberOfAvailabilityZones | string }}"
+     PreferredMaintenanceWindowDay: "{{ PreferredMaintenanceWindowDay }}"
+     PreferredMaintenanceWindowStartTime: "{{ PreferredMaintenanceWindowStartTime }}"
+     PreferredMaintenanceWindowEndTime: "{{ PreferredMaintenanceWindowEndTime }}"
+     AvailabilityZones: "{{ AvailabilityZones }}"
+     CidrBlocks: "{{ CidrBlocks }}"
+     AccessCidr: "{{ AccessCidr }}"
+     MasterUsername: "{{ MasterUsername }}"
+     MasterUserPassword: "{{ MasterUserPassword }}"
+     StorageEncrypted: "{{ StorageEncrypted }}"
+     BackupRetentionPeriod: "{{ BackupRetentionPeriod | string }}"
+     PortNumber: "{{ PortNumber | string }}"
+     PubliclyAccessible: "{{ PubliclyAccessible }}"
+     DBName: "{{ DBName }}"
+
+     NodeType: "{{ NodeType }}"
+     NumberOfNodes: "{{ NumberOfNodes }}"
+     ClusterType: "{{ ClusterType }}"
+     UseElasticIP: "{{ UseElasticIP }}"
+     LogBucketName: "{{ LogBucketName }}"
+     AllowVersionUpgrade: "{{ AllowVersionUpgrade }}"
+
    tags:
      Stack: "ansible-cloudformation"
      Application: "ansible-redshift"
      Description: "{{ ansible_user_id }} redshift {{ ApplicationName }}"
   register: redshift
+
+
+- name: Check for Redshift CloudFormation error logs
+  debug:
+    var: redshift.log

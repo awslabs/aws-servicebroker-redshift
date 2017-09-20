@@ -1,4 +1,4 @@
-- name: Deploy sns to openshift
+- name: Provision Redshift
   hosts: localhost
   gather_facts: true
   connection: local
@@ -8,4 +8,4 @@
 
   - role: ansibleplaybookbundle.asb-modules
 
-  - role: provision-sns-apb-openshift
+  - role: provision-redshift-apb-openshift

@@ -40,9 +40,9 @@ plans:
       - name: DBName
         required: true
         title: DB Name
-        description: 'The name of the database to create when the Redshift cluster is created. (letters and numbers, max 64 chars)'
+        description: "The name of the database to create when the Redshift cluster is created. Must be lowercase, begin with a letter, contain only alphanumeric characters, and be less than 64 characters.)"
         type: string
-        default: "DWDB1"
+        default: "redshiftdb1"
       - name: VpcId
         required: true
         title: VPC ID
@@ -65,7 +65,7 @@ plans:
         title: Publicly Accessible
         description: 'Indicates whether the DB instance is an Internet-facing instance. (values: "true", "false")'
         type: string
-        default: "false"
+        default: "true"
       - name: PreferredMaintenanceWindowDay
         required: true
         title: Day of Preferred Maintenance Window
@@ -153,7 +153,7 @@ plans:
         title: Use Elastic IP
         description: 'For public accessable clusters which require a static IP, assign a EIP'
         type: string
-        default: "true"
+        default: "false"
       - name: LogBucketName
         required: true
         title: Log Bucket Name
