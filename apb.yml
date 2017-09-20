@@ -124,7 +124,7 @@ plans:
         description: 'The type of cluster. Specify single-node or multi-node (default).  Number of nodes must be greater than 1 for multi-node'
         type: string
         default: 'multi-node'
-     - name: MasterUsername
+      - name: MasterUsername
         required: true
         title: Master User Name
         description: 'Master database Username'
@@ -148,19 +148,18 @@ plans:
         description: 'Indicates whether the Cluster storage is encrypted. (values: "true", "false")'
         type: string
         default: "true"
-        - name: UseElasticIP
+      - name: UseElasticIP
         required: true
         title: Use Elastic IP
         description: 'For public accessable clusters which require a static IP, assign a EIP'
         type: string
         default: "true"
-        - name: LogBucketName
+      - name: LogBucketName
         required: true
         title: Log Bucket Name
         description: 'Must be a valid S3 Bucket in same Region,if no bucket is provided audit logging will not be enabled for this cluster'
         type: string
         default: "true"
-
     metadata:
         displayName: "Amazon Redshift"
         longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
