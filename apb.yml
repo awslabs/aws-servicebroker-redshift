@@ -30,8 +30,22 @@ plans:
         required: true
         title: AWS Region
         description: 'AWS Region to create RDS instance in.'
-        type: string
-        default: "us-west-2"
+        type: enum
+        enum:
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-south-1
+          - ap-southeast-1
+          - ap-southeast-2
+          - ca-central-1
+          - eu-central-1
+          - eu-west-1
+          - eu-west-2
+          - sa-east-1
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
       - name: ApplicationName
         required: true
         title: Application Name
@@ -64,25 +78,83 @@ plans:
         required: true
         title: Publicly Accessible
         description: 'Indicates whether the DB instance is an Internet-facing instance. (values: "true", "false")'
-        type: string
+        type: enum
+        enum: ["true", "false"]
         default: "true"
       - name: PreferredMaintenanceWindowDay
         required: true
         title: Day of Preferred Maintenance Window
         description: 'The day of the week which RedShift  maintenance will be performed (e.g. "Mon")'
-        type: string
+        type: enum
+        enum:
+          - Mon
+          - Tue
+          - Wed
+          - Thu
+          - Fri
+          - Sat
+          - Sun
         default: "Mon"
       - name: PreferredMaintenanceWindowStartTime
         required: true
         title: Preferred Maintenance Window Start Time
         description: 'The weekly start time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
         type: string
+        type: enum
+        enum:
+          - '00:00'
+          - '01:00'
+          - '02:00'
+          - '03:00'
+          - '04:00'
+          - '05:00'
+          - '06:00'
+          - '07:00'
+          - '08:00'
+          - '09:00'
+          - '10:00'
+          - '11:00'
+          - '12:00'
+          - '13:00'
+          - '14:00'
+          - '15:00'
+          - '16:00'
+          - '17:00'
+          - '18:00'
+          - '19:00'
+          - '20:00'
+          - '21:00'
+          - '22:00'
         default: "04:00"
       - name: PreferredMaintenanceWindowEndTime
         required: true
         title: Preferred Maintenance Window End Time
         description: 'The weekly end time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
-        type: string
+        type: enum
+        enum:
+          - '00:00'
+          - '01:00'
+          - '02:00'
+          - '03:00'
+          - '04:00'
+          - '05:00'
+          - '06:00'
+          - '07:00'
+          - '08:00'
+          - '09:00'
+          - '10:00'
+          - '11:00'
+          - '12:00'
+          - '13:00'
+          - '14:00'
+          - '15:00'
+          - '16:00'
+          - '17:00'
+          - '18:00'
+          - '19:00'
+          - '20:00'
+          - '21:00'
+          - '22:00'
         default: "06:00"
       - name: NumberOfAvailabilityZones
         required: true
@@ -110,7 +182,14 @@ plans:
         required: true
         title: Node Type
         description: 'The node type that is provisioned for this cluster.'
-        type: string
+        type: enum
+        enum:
+          - dc1.large
+          - dc1.8xlarge
+          - ds1.xlarge
+          - ds1.8xlarge
+          - ds2.xlarge
+          - ds2.8xlarge
         default: 'dc1.large'
       - name: NumberOfNodes
         required: true
@@ -122,7 +201,8 @@ plans:
         required: true
         title: Cluster Type
         description: 'The type of cluster. Specify single-node or multi-node (default).  Number of nodes must be greater than 1 for multi-node'
-        type: string
+        type: enum
+        enum: ["single-node", "multi-node"]
         default: 'multi-node'
       - name: MasterUsername
         required: true
@@ -140,25 +220,29 @@ plans:
         required: true
         title: Allow Version Upgrade
         description: 'If you update the Engine Version property to a version that''s different from the DB instance''s current major version, set this property to true. (values: "true", "false")'
-        type: string
+        type: enum
+        enum: ["true", "false"]
         default: "true"
       - name: StorageEncrypted
         required: true
         title: Storage Encrypted
         description: 'Indicates whether the Cluster storage is encrypted. (values: "true", "false")'
-        type: string
+        type: enum
+        enum: ["true", "false"]
         default: "true"
       - name: UseElasticIP
         required: true
         title: Use Elastic IP
         description: 'For public accessable clusters which require a static IP, assign a EIP'
-        type: string
+        type: enum
+        enum: ["true", "false"]
         default: "false"
       - name: LogBucketName
         required: true
         title: Log Bucket Name
         description: 'Must be a valid S3 Bucket in same Region,if no bucket is provided audit logging will not be enabled for this cluster'
-        type: string
+        type: enum
+        enum: ["true", "false"]
         default: "true"
     metadata:
         displayName: "Amazon Redshift"
