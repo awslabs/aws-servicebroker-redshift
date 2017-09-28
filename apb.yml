@@ -99,7 +99,6 @@ plans:
         required: true
         title: Preferred Maintenance Window Start Time
         description: 'The weekly start time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
-        type: string
         type: enum
         enum:
           - '00:00'
