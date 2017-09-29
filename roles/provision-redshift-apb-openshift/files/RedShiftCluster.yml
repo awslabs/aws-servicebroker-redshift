@@ -146,19 +146,19 @@ Parameters:
     Description: >-
       When a new version of Amazon Redshift is released, tells whether upgrades
       can be applied to the engine that is running on the cluster. The upgrades
-      are applied during the maintenance window. The default value is true. 
+      are applied during the maintenance window. The default value is True. 
     Type: String
-    Default: 'true'
+    Default: 'True'
     AllowedValues:
-      - 'true'
-      - 'false'
+      - 'True'
+      - 'False'
   StorageEncrypted:
     Description: Indicates whether the Cluster storage is encrypted.
     Type: String
-    Default: 'true'
+    Default: 'True'
     AllowedValues:
-      - 'true'
-      - 'false'
+      - 'True'
+      - 'False'
   BackupRetentionPeriod:
     Description: >-
       The number of days during which automatic DB snapshots are retained.
@@ -176,20 +176,20 @@ Parameters:
   PubliclyAccessible:
     Description: Indicates whether the Cluster is an Internet-facing instance.
     Type: String
-    Default: 'false'
+    Default: 'False'
     AllowedValues:
-      - 'true'
-      - 'false'
+      - 'True'
+      - 'False'
   UseElasticIP:
     Description: 'For public accessable clusters which require a static IP, assign a EIP'
     Type: String
-    Default: 'false'
+    Default: 'False'
     AllowedValues:
-      - 'true'
-      - 'false'
+      - 'True'
+      - 'False'
   LogBucketName:
     Description: >-
-      Must be a valid S3 Bucket in same Region,if no bucket is provided audit
+      Must be a valid S3 Bucket in same Region, if no bucket is provided audit
       logging will not be enabled for this cluster
     Type: String
   DBName:
@@ -222,10 +222,10 @@ Conditions:
     - '5'
   UseEIP: !Equals 
     - !Ref UseElasticIP
-    - 'true'
+    - 'True'
   EncryptStorage: !Equals 
     - !Ref StorageEncrypted
-    - 'true'
+    - 'True'
   EnableLogging: !Not 
     - !Equals 
       - !Ref LogBucketName

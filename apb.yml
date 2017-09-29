@@ -6,6 +6,11 @@ tags:
   - redshift
 bindable: true
 async: optional
+metadata:
+  displayName: "Amazon Redshift"
+  longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
+  documentationUrl: "https://aws.amazon.com/documentation/redshift/"
+  imageUrl: "https://s3.amazonaws.com/thp-aws-icons-dev/Database_AmazonRedshift_LARGE.png"
 plans:
   - name: default
     description: 'Managed redshift cluster'
@@ -65,9 +70,10 @@ plans:
       - name: BackupRetentionPeriod
         required: true
         title: Backup Retention Period
-        description: 'The number of days during which automatic Backups are retained. Setting 0 disables automatic snapshots, maximum value is 35.'
-        type: int
-        default: 35
+        description: 'The number of days during which automatic Backups are retained. Setting 0 disables automatic snapshots.'
+        type: enum
+        enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
+        default: "35"
       - name: PortNumber
         required: true
         title: Port Number
@@ -77,14 +83,13 @@ plans:
       - name: PubliclyAccessible
         required: true
         title: Publicly Accessible
-        description: 'Indicates whether the DB instance is an Internet-facing instance. (values: "true", "false")'
-        type: enum
-        enum: ["true", "false"]
-        default: "true"
+        description: 'Indicates whether the DB instance is an Internet-facing instance.'
+        type: boolean
+        default: true
       - name: PreferredMaintenanceWindowDay
         required: true
         title: Day of Preferred Maintenance Window
-        description: 'The day of the week which RedShift  maintenance will be performed (e.g. "Mon")'
+        description: 'The day of the week which RedShift maintenance will be performed'
         type: enum
         enum:
           - Mon
@@ -98,7 +103,7 @@ plans:
       - name: PreferredMaintenanceWindowStartTime
         required: true
         title: Preferred Maintenance Window Start Time
-        description: 'The weekly start time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
+        description: 'The weekly start time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window'
         type: enum
         enum:
           - '00:00'
@@ -128,7 +133,7 @@ plans:
       - name: PreferredMaintenanceWindowEndTime
         required: true
         title: Preferred Maintenance Window End Time
-        description: 'The weekly end time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window (e.g. "04:00")'
+        description: 'The weekly end time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window'
         type: enum
         enum:
           - '00:00'
@@ -214,38 +219,29 @@ plans:
         title: Master User Password
         description: 'Master user database Password'
         type: string
-        default: Passw0rd
       - name: AllowVersionUpgrade
         required: true
         title: Allow Version Upgrade
-        description: 'If you update the Engine Version property to a version that''s different from the DB instance''s current major version, set this property to true. (values: "true", "false")'
-        type: enum
-        enum: ["true", "false"]
-        default: "true"
+        description: 'If you update the Engine Version property to a version that''s different from the DB instance''s current major version, set this property to true.'
+        type: boolean
+        default: true
       - name: StorageEncrypted
         required: true
         title: Storage Encrypted
-        description: 'Indicates whether the Cluster storage is encrypted. (values: "true", "false")'
-        type: enum
-        enum: ["true", "false"]
-        default: "true"
+        description: 'Indicates whether the Cluster storage is encrypted.'
+        type: boolean
+        default: true
       - name: UseElasticIP
         required: true
         title: Use Elastic IP
-        description: 'For public accessable clusters which require a static IP, assign a EIP'
-        type: enum
-        enum: ["true", "false"]
-        default: "false"
+        description: 'For public accessible clusters which require a static IP, assign a EIP'
+        type: boolean
+        default: false
       - name: LogBucketName
-        required: true
         title: Log Bucket Name
-        description: 'Must be a valid S3 Bucket in same Region,if no bucket is provided audit logging will not be enabled for this cluster'
-        type: enum
-        enum: ["true", "false"]
-        default: "true"
+        description: 'Must be a valid S3 Bucket in same Region, if no bucket is provided audit logging will not be enabled for this cluster'
+        type: string
     metadata:
         displayName: "Amazon Redshift"
         longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
-        imageUrl: "https://s3.amazonaws.com/thp-aws-icons-dev/Database_AmazonRedshift_LARGE.png"
-        documentationUrl: "https://aws.amazon.com/documentation/redshift/"
         cost: $0.00
