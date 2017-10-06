@@ -1,5 +1,5 @@
+version: 1.0
 name: redshift-apb
-image: ansibleplaybookbundle/redshift-apb
 description: 'Managed redshift cluster'
 tags:
   - amazon
