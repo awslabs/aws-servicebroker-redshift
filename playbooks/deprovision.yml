@@ -2,6 +2,9 @@
   hosts: localhost
   gather_facts: false
   connection: local
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   roles:
   - role: ansible.kubernetes-modules
     install_python_requirements: no

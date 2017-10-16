@@ -1,0 +1,23 @@
+# until we have a unique application_name make a hash out of the input params values
+# so you will not be able to have 2 ServiceInstances with the same settings in a project
+params_string: "{{ namespace }}::{{ _apb_plan_id }}::{{ aws_access_key }}::{{ aws_secret_key }}::{{ region }}::{{ NodeType }}::{{ NumberOfNodes }}::{{ VpcId }}::{{ PubliclyAccessible }}::{{ AccessCidr }}::{{ StorageEncrypted }}::{{ UseElasticIP }}::{{ PreferredMaintenanceWindowDay }}::{{ PreferredMaintenanceWindowStartTime }}::{{ PreferredMaintenanceWindowEndTime }}"
+params_hash: "{{ params_string | checksum }}"
+
+# params
+application_name_alnum: "{{ application_name | regex_replace('[^a-zA-Z0-9]') }}"
+DBName: "{{ application_name_alnum[0:30] | lower }}"
+MasterUsername: "master"
+MasterUserPassword: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=64') }}"
+AllowVersionUpgrade: false
+PortNumber: 15439
+NumberOfAvailabilityZones: "2"
+AvailabilityZones: "auto"
+CidrSize: "27"
+CidrBlocks: "auto"
+BackupRetentionPeriod: 35
+ClusterType: multi-node
+# TODO: Build bucket into the template and remove this param
+LogBucketName: ''
+# TODO: set this to true once the issue with encryption is resolved
+# StorageEncrypted: true
+
