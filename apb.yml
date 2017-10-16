@@ -8,29 +8,35 @@ bindable: true
 async: optional
 metadata:
   displayName: "Amazon Redshift"
+  imageUrl: "https://s3.amazonaws.com/thp-aws-icons-dev/Database_AmazonRedshift_LARGE.png"
   longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
   documentationUrl: "https://aws.amazon.com/documentation/redshift/"
-  imageUrl: "https://s3.amazonaws.com/thp-aws-icons-dev/Database_AmazonRedshift_LARGE.png"
+  providerDisplayName: "AWS"
 plans:
-  - name: default
+  - name: redshift-prod
     description: 'Managed redshift cluster'
     free: false
+    metadata:
+        displayName: "Amazon Redshift - Production"
+        longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
+        cost: $0.00
     parameters:
-      - name: stack_identifier
-        required: true
-        title: Unique Stack Identifier
-        description: 'Unique identifier to be included in the CloudFormation Stack Name to prevent naming collisions. Must only contain alphanumeric characters and hyphens. (e.g. "sample-redshift-stack", "production-redshift-09-2017")'
-        type: string
+      ##########################
+      # AWS Account Information
+      ##########################
       - name: aws_access_key
         required: true
         title: AWS Access Key
         description: 'AWS Access Key to authenticate to AWS with.'
         type: string
+        display_group: AWS Account Information
       - name: aws_secret_key
         required: true
         title: AWS Secret Key
         description: 'AWS Secret Key to authenticate to AWS with.'
         type: string
+        display_type: password
+        display_group: AWS Account Information
       - name: region
         required: true
         title: AWS Region
@@ -51,41 +57,72 @@ plans:
           - us-east-2
           - us-west-1
           - us-west-2
-      - name: ApplicationName
+        default: us-west-2
+        display_group: AWS Account Information
+      ###################################
+      # Database Instance Specifications
+      ###################################
+      - name: NodeType
         required: true
-        title: Application Name
-        description: 'Redshift Application name'
-        type: string
-      - name: DBName
+        title: Node Type
+        description: 'The node type that is provisioned for this cluster.'
+        type: enum
+        enum:
+          - dc1.large
+          - dc1.8xlarge
+          - ds1.xlarge
+          - ds1.8xlarge
+          - ds2.xlarge
+          - ds2.8xlarge
+        default: 'dc1.large'
+        display_group: Database Instance Specifications
+      - name: NumberOfNodes
         required: true
-        title: DB Name
-        description: "The name of the database to create when the Redshift cluster is created. Must be lowercase, begin with a letter, contain only alphanumeric characters, and be less than 64 characters.)"
+        title: Number of Nodes
+        description: 'The number of compute nodes in the cluster. If you specify multi-node for the ClusterType parameter, you must specify a number greater than 1. You can not specify this parameter for a single-node cluster. min 2 max 32 '
         type: string
-        default: "redshiftdb1"
+        default: '2'
+        display_group: Database Instance Specifications
+      #######################
+      # Network and Security
+      #######################
       - name: VpcId
         required: true
         title: VPC ID
         description: 'VPC ID (e.g. "vpc-6c9f1a0b")'
         type: string
-      - name: BackupRetentionPeriod
-        required: true
-        title: Backup Retention Period
-        description: 'The number of days during which automatic Backups are retained. Setting 0 disables automatic snapshots.'
-        type: enum
-        enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
-        default: "35"
-      - name: PortNumber
-        required: true
-        title: Port Number
-        description: 'The port number for the database server to listen on. (values in range 1150-65535)'
-        type: int
-        default: 5439
+        display_group: Network and Security
       - name: PubliclyAccessible
         required: true
         title: Publicly Accessible
         description: 'Indicates whether the DB instance is an Internet-facing instance.'
         type: boolean
         default: true
+        display_group: Network and Security
+      - name: AccessCidr
+        required: true
+        title: Access CIDR
+        description: 'CIDR block to allow to connect to database (e.g. "10.0.0.0/16")'
+        type: string
+        display_group: Network and Security
+      - name: StorageEncrypted
+        required: true
+        title: Storage Encrypted
+        description: 'Indicates whether the Cluster storage is encrypted.'
+        type: boolean
+        default: true
+        display_group: Network and Security
+      # TODO: we should probably just assign(or not) an eip if PubliclyAccessible is true and get rid of this param
+      - name: UseElasticIP
+        required: true
+        title: Use Elastic IP
+        description: 'For public accessible clusters which require a static IP, assign a EIP'
+        type: boolean
+        default: false
+        display_group: Network and Security
+      ##############
+      # Maintenance
+      ##############
       - name: PreferredMaintenanceWindowDay
         required: true
         title: Day of Preferred Maintenance Window
@@ -100,6 +137,7 @@ plans:
           - Sat
           - Sun
         default: "Mon"
+        display_group: Maintenance
       - name: PreferredMaintenanceWindowStartTime
         required: true
         title: Preferred Maintenance Window Start Time
@@ -130,6 +168,7 @@ plans:
           - '21:00'
           - '22:00'
         default: "04:00"
+        display_group: Maintenance
       - name: PreferredMaintenanceWindowEndTime
         required: true
         title: Preferred Maintenance Window End Time
@@ -160,28 +199,241 @@ plans:
           - '21:00'
           - '22:00'
         default: "06:00"
+        display_group: Maintenance
+  - name: redshift-custom
+    description: 'Managed redshift cluster'
+    free: false
+    metadata:
+        displayName: "Amazon Redshift - Custom"
+        longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
+        cost: $0.00
+    parameters:
+      ##########################
+      # AWS Account Information
+      ##########################
+      - name: aws_access_key
+        required: true
+        title: AWS Access Key
+        description: 'AWS Access Key to authenticate to AWS with.'
+        type: string
+        display_group: AWS Account Information
+      - name: aws_secret_key
+        required: true
+        title: AWS Secret Key
+        description: 'AWS Secret Key to authenticate to AWS with.'
+        type: string
+        display_type: password
+        display_group: AWS Account Information
+      - name: region
+        required: true
+        title: AWS Region
+        description: 'AWS Region to create RDS instance in.'
+        type: enum
+        enum:
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-south-1
+          - ap-southeast-1
+          - ap-southeast-2
+          - ca-central-1
+          - eu-central-1
+          - eu-west-1
+          - eu-west-2
+          - sa-east-1
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+        default: us-west-2
+        display_group: AWS Account Information
+      ###################
+      # Database Options
+      ###################
+      - name: DBName
+        required: true
+        title: DB Name
+        description: "The name of the database to create when the Redshift cluster is created. Must be lowercase, begin with a letter, contain only alphanumeric characters, and be less than 64 characters.)"
+        type: string
+        default: "redshiftdb1"
+        display_group: Database Options
+      - name: MasterUsername
+        required: true
+        title: Master User Name
+        description: 'Master database Username'
+        type: string
+        default: admin
+        display_group: Database Options
+      - name: MasterUserPassword
+        required: true
+        title: Master User Password
+        description: 'Master user database Password'
+        type: string
+        display_type: password
+        display_group: Database Options
+      - name: AllowVersionUpgrade
+        required: true
+        title: Allow Version Upgrade
+        description: 'If you update the Engine Version property to a version that''s different from the DB instance''s current major version, set this property to true.'
+        type: boolean
+        default: true
+        display_group: Database Options
+      #######################
+      # Network and Security
+      #######################
+      - name: VpcId
+        required: true
+        title: VPC ID
+        description: 'VPC ID (e.g. "vpc-6c9f1a0b")'
+        type: string
+        display_group: Network and Security
+      - name: PortNumber
+        required: true
+        title: Port Number
+        description: 'The port number for the database server to listen on. (values in range 1150-65535)'
+        type: int
+        default: 15439
+        display_group: Network and Security
+      - name: PubliclyAccessible
+        required: true
+        title: Publicly Accessible
+        description: 'Indicates whether the DB instance is an Internet-facing instance.'
+        type: boolean
+        default: true
+        display_group: Network and Security
       - name: NumberOfAvailabilityZones
         required: true
         title: Number of Availability Zones
         description: 'Quantity of subnets to use, if selecting more than 2 the region this stack is in must have at least that many Availability Zones'
         type: int
-        default: 3
+        default: 2
+        display_group: Network and Security
       - name: AvailabilityZones
         required: true
         title: Availability Zones
         description: 'Comma separated list of availability zones to use, must be the same quantity as specified in Number of Availability Zones (e.g. "us-west-2a,us-west-2b,us-west-2c")'
         type: string
         default: "us-west-2a,us-west-2b,us-west-2c"
+        display_group: Network and Security
       - name: CidrBlocks
         required: true
         title: CIDR Blocks
         description: 'Comma seperated list of CIDR blocks to place RDS into, must be the same quantity as specified in Number of Availability Zones (e.g. "10.0.96.0/20,10.0.112.0/20,10.0.128.0/20")'
         type: string
+        display_group: Network and Security
       - name: AccessCidr
         required: true
         title: Access CIDR
         description: 'CIDR block to allow to connect to database (e.g. "10.0.0.0/16")'
         type: string
+        display_group: Network and Security
+      - name: StorageEncrypted
+        required: true
+        title: Storage Encrypted
+        description: 'Indicates whether the Cluster storage is encrypted.'
+        type: boolean
+        default: true
+        display_group: Network and Security
+      - name: UseElasticIP
+        required: true
+        title: Use Elastic IP
+        description: 'For public accessible clusters which require a static IP, assign a EIP'
+        type: boolean
+        default: false
+        display_group: Network and Security
+      #########
+      # Backup
+      #########
+      - name: BackupRetentionPeriod
+        required: true
+        title: Backup Retention Period
+        description: 'The number of days during which automatic Backups are retained. Setting 0 disables automatic snapshots.'
+        type: enum
+        enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
+        default: "35"
+        display_group: Backup
+      ##############
+      # Maintenance
+      ##############
+      - name: PreferredMaintenanceWindowDay
+        required: true
+        title: Day of Preferred Maintenance Window
+        description: 'The day of the week which RedShift maintenance will be performed'
+        type: enum
+        enum:
+          - Mon
+          - Tue
+          - Wed
+          - Thu
+          - Fri
+          - Sat
+          - Sun
+        default: "Mon"
+        display_group: Maintenance
+      - name: PreferredMaintenanceWindowStartTime
+        required: true
+        title: Preferred Maintenance Window Start Time
+        description: 'The weekly start time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window'
+        type: enum
+        enum:
+          - '00:00'
+          - '01:00'
+          - '02:00'
+          - '03:00'
+          - '04:00'
+          - '05:00'
+          - '06:00'
+          - '07:00'
+          - '08:00'
+          - '09:00'
+          - '10:00'
+          - '11:00'
+          - '12:00'
+          - '13:00'
+          - '14:00'
+          - '15:00'
+          - '16:00'
+          - '17:00'
+          - '18:00'
+          - '19:00'
+          - '20:00'
+          - '21:00'
+          - '22:00'
+        default: "04:00"
+        display_group: Maintenance
+      - name: PreferredMaintenanceWindowEndTime
+        required: true
+        title: Preferred Maintenance Window End Time
+        description: 'The weekly end time in UTC for the RedShift maintenance window, must be less than Preferred Maintenance Window End Time and cannot overlap with Preferred Backup Window'
+        type: enum
+        enum:
+          - '00:00'
+          - '01:00'
+          - '02:00'
+          - '03:00'
+          - '04:00'
+          - '05:00'
+          - '06:00'
+          - '07:00'
+          - '08:00'
+          - '09:00'
+          - '10:00'
+          - '11:00'
+          - '12:00'
+          - '13:00'
+          - '14:00'
+          - '15:00'
+          - '16:00'
+          - '17:00'
+          - '18:00'
+          - '19:00'
+          - '20:00'
+          - '21:00'
+          - '22:00'
+        default: "06:00"
+        display_group: Maintenance
+      ###################################
+      # Database Instance Specifications
+      ###################################
       - name: NodeType
         required: true
         title: Node Type
@@ -195,12 +447,14 @@ plans:
           - ds2.xlarge
           - ds2.8xlarge
         default: 'dc1.large'
+        display_group: Database Instance Specifications
       - name: NumberOfNodes
         required: true
         title: Number of Nodes
         description: 'The number of compute nodes in the cluster. If you specify multi-node for the ClusterType parameter, you must specify a number greater than 1. You can not specify this parameter for a single-node cluster. min 2 max 32 '
         type: string
-        default: '3'
+        default: '2'
+        display_group: Database Instance Specifications
       - name: ClusterType
         required: true
         title: Cluster Type
@@ -208,40 +462,9 @@ plans:
         type: enum
         enum: ["single-node", "multi-node"]
         default: 'multi-node'
-      - name: MasterUsername
-        required: true
-        title: Master User Name
-        description: 'Master database Username'
-        type: string
-        default: admin
-      - name: MasterUserPassword
-        required: true
-        title: Master User Password
-        description: 'Master user database Password'
-        type: string
-      - name: AllowVersionUpgrade
-        required: true
-        title: Allow Version Upgrade
-        description: 'If you update the Engine Version property to a version that''s different from the DB instance''s current major version, set this property to true.'
-        type: boolean
-        default: true
-      - name: StorageEncrypted
-        required: true
-        title: Storage Encrypted
-        description: 'Indicates whether the Cluster storage is encrypted.'
-        type: boolean
-        default: true
-      - name: UseElasticIP
-        required: true
-        title: Use Elastic IP
-        description: 'For public accessible clusters which require a static IP, assign a EIP'
-        type: boolean
-        default: false
+        display_group: Database Instance Specifications
       - name: LogBucketName
         title: Log Bucket Name
         description: 'Must be a valid S3 Bucket in same Region, if no bucket is provided audit logging will not be enabled for this cluster'
         type: string
-    metadata:
-        displayName: "Amazon Redshift"
-        longDescription: "Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging from a few hundred gigabytes to a petabyte or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions."
-        cost: $0.00
+        display_group: Database Instance Specifications

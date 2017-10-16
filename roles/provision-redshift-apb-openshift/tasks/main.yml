@@ -1,14 +1,40 @@
+- name: include plan vars
+  include_vars:
+    file: "{{ _apb_plan_id }}.yml"
+- name: generate b62 hash
+  shell: "16to62 {{ params_hash }}"
+  register: command_output
+- name: set fact
+  set_fact:
+    stack_suffix: "{{ command_output.stdout }}"
+- name: generate cidrs
+  block:
+  - name: generate cidrs
+    shell: "getcidrs {{ CidrSize }} {{ NumberOfAvailabilityZones }} {{ VpcId }} {{ region }}"
+    register: command_output
+  - name: set fact
+    set_fact:
+      CidrBlocks: "{{ command_output.stdout }}"
+  when: CidrBlocks == "auto"
+- name: generate azs
+  block:
+  - name: generate azs
+    shell: "getazs {{ NumberOfAvailabilityZones }} {{ region }}"
+    register: command_output
+  - name: set fact
+    set_fact:
+      AvailabilityZones: "{{ command_output.stdout }}"
+  when: AvailabilityZones == "auto"
 - name: Launch Redshift
   cloudformation:
-   aws_access_key: "{{ aws_access_key }}"
-   aws_secret_key: "{{ aws_secret_key }}"
-   stack_name: "apb-redshift-{{ stack_identifier }}"
+   stack_name: "apb-redshift-{{ stack_suffix }}"
    state: "present"
    region: "{{ region }}"
    disable_rollback: false
    template: "{{ role_path }}/files/RedShiftCluster.yml"
+   role_arn: "{{ aws_cloudformation_role_arn }}"
    template_parameters:
-     ApplicationName: "{{ ApplicationName }}"
+     ApplicationName: "{{ application_name }}"
      VpcId: "{{ VpcId }}"
      NumberOfAvailabilityZones: "{{ NumberOfAvailabilityZones | string }}"
      PreferredMaintenanceWindowDay: "{{ PreferredMaintenanceWindowDay }}"
@@ -31,9 +57,7 @@
      LogBucketName: "{{ LogBucketName }}"
      AllowVersionUpgrade: "{{ AllowVersionUpgrade | string }}"
    tags:
-     Stack: "ansible-cloudformation"
-     Application: "ansible-redshift"
-     Description: "{{ ansible_user_id }} redshift {{ ApplicationName }}"
+     ServiceBrokerId: "{{ application_name }}"
   register: redshift
 - name: Check for CloudFormation error logs
   debug:
@@ -45,5 +69,5 @@
       REDSHIFT_PORT: "{{ PortNumber | string }}"
       REDSHIFT_USERNAME: "{{ MasterUsername }}"
       REDSHIFT_PASSWORD: "{{ MasterUserPassword }}"
-
+      REDSHIFT_DB_NAME: "{{ DBName }}"
   when: redshift.log | length < 1
