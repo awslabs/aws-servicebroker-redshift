@@ -259,6 +259,9 @@ Resources:
               - 'kms:Delete*'
               - 'kms:ScheduleKeyDeletion'
               - 'kms:CancelKeyDeletion'
+              - 'kms:GenerateDataKey'
+              - 'kms:GenerateDataKeyWithoutPlaintext'
+              - 'kms:GenerateRandom'
             Resource: '*'
   ClusterParameterGroup:
     Type: 'AWS::Redshift::ClusterParameterGroup'
