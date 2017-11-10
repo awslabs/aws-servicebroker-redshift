@@ -15,4 +15,4 @@ plans:
       PreferredMaintenanceWindowDay: Mon
       PreferredMaintenanceWindowStartTime: "04:00"
       PreferredMaintenanceWindowEndTime: "06:00"
-    sample_app: dynamodb-sample-app-apb
+    sample_app: redshift-sample-app-apb
