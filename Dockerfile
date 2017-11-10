@@ -8,6 +8,9 @@ COPY playbooks /opt/apb/actions
 COPY bin/16to62 /usr/bin/16to62
 COPY bin/getcidrs /usr/bin/getcidrs
 COPY bin/getazs /usr/bin/getazs
+RUN chmod +x /usr/bin/16to62
+RUN chmod +x /usr/bin/getcidrs
+RUN chmod +x /usr/bin/getazs
 
 LABEL "com.redhat.apb.spec"=\
 
