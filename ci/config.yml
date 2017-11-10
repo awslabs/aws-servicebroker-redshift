@@ -1,0 +1,16 @@
+global:
+  parameters: {}
+  regions:
+    - us-east-1
+
+plans:
+  redshift-prod:
+    parameters:
+      NumCacheNodes: 2
+      EngineVersion: "1.4.34"
+      CacheNodeType: "cache.m4.large"
+      AccessCidr: "10.0.0.0/16"
+      PreferredMaintenanceWindowDay: Mon
+      PreferredMaintenanceWindowStartTime: "04:00"
+      PreferredMaintenanceWindowEndTime: "06:00"
+    sample_app: dynamodb-sample-app-apb
