@@ -7,6 +7,9 @@
 - name: set fact
   set_fact:
     stack_suffix: "{{ command_output.stdout }}"
+- name: Log stack suffix
+  debug:
+    msg: "stack_suffix: {{ stack_suffix }}"
 - name: generate cidrs
   block:
   - name: generate cidrs
