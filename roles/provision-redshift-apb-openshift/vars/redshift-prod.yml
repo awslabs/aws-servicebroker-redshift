@@ -7,7 +7,7 @@ params_hash: "{{ params_string | checksum }}"
 application_name_alnum: "{{ application_name | regex_replace('[^a-zA-Z0-9]') }}"
 DBName: "{{ application_name_alnum[0:30] | lower }}"
 MasterUsername: "master"
-MasterUserPassword: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=64') }}"
+MasterUserPassword: "{{ lookup('password', '/tmp/dbpass chars=ascii_letters,digits length=64') }}"
 AllowVersionUpgrade: false
 PortNumber: 15439
 NumberOfAvailabilityZones: "2"
