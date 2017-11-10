@@ -103,7 +103,7 @@ plans:
         title: Publicly Accessible
         description: 'Indicates whether the DB instance is an Internet-facing instance.'
         type: boolean
-        default: true
+        default: false
         display_group: Network and Security
       - name: AccessCidr
         required: true
