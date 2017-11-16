@@ -68,9 +68,9 @@
 - name: Encode bind credentials
   asb_encode_binding:
     fields:
-      REDSHIFT_ENDPOINT: "{{ redshift.stack_outputs.EndpointAddress }}"
-      REDSHIFT_PORT: "{{ PortNumber | string }}"
-      REDSHIFT_USERNAME: "{{ MasterUsername }}"
-      REDSHIFT_PASSWORD: "{{ MasterUserPassword }}"
-      REDSHIFT_DB_NAME: "{{ DBName }}"
+      REDSHIFT_ENDPOINT_ADDRESS:     "{{ redshift.stack_outputs.EndpointAddress }}"
+      REDSHIFT_PORT:                 "{{ PortNumber | string }}"
+      REDSHIFT_MASTER_USERNAME:      "{{ MasterUsername }}"
+      REDSHIFT_MASTER_USER_PASSWORD: "{{ MasterUserPassword }}"
+      REDSHIFT_DB_NAME:              "{{ DBName }}"
   when: redshift.log | length < 1
