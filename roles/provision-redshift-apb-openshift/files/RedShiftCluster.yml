@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: ' Redshift Template for Production Databases'
+Description: ' Redshift Template for Production Databases. qs-1nt0fs932'
 Parameters:
   ApplicationName:
     Description: >-
