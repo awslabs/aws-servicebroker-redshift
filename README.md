@@ -1,23 +1,44 @@
-# Redshift-APB
+# Amazon RedShift for the AWS Service Broker
+Provision, manage and connect to [Amazon RedShift](https://aws.amazon.com/redshift/).
 
-### Plans:
-Amazon Redshift - Custom
-Amazon Redshift - Production
+## Prerequisites
 
-### Prerequisites:
-#### IAM resources: ####
-#### These need to already exist within the AWS account the service broker resources are going to be created in. 
-OpenShift will need to authenticate to an AWS account and have the required permissions to create and manage resources.
-In order to authenticate to the AWS account an IAM user information will be required. 
-http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
+**IAM resources** - See the [AWS Service Broker Requirements](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/Overview.md#requirements) for details
+**VPC** - A VPC ID will be requested during launch, A VPC with unused CIDR space is required as the plan will create the required subnets.
 
-AWS CloudFormation will make use of a IAM service role used to launch the required resources.
-This role must have the required permissions to launch the expected resouces, the role needs to be able to be assumed by the CloudFormation service.
-http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
+## Plans
 
-### Use case expectations:
+### redshift-custom
+Exposes all available parameters for the MySQL RDS engine.
 
-### Retained resources:
-Resources retained within the AWS account should this plan be removed.
+### redshift-prod
+Best practice RedShift plan for production by setting the following parameters:
 
-* No resources are detained for this broker.
+    DBName: automatic
+    MasterUsername: master
+    MasterUserPassword: automatic
+    AllowVersionUpgrade: false
+    PortNumber: 15439
+    NumberOfAvailabilityZones: 2
+    AvailabilityZones: automatic
+    CidrSize: 27
+    CidrBlocks: automatic
+    BackupRetentionPeriod: 35
+    ClusterType: multi-node
+    LogBucketName: ''
+    StorageEncrypted: true
+
+## Retained resources
+
+No resources are retained. The RedShift cluster, data and all associated resources will be fully removed if the Service Instance is deleted.
+
+## Resources
+
+[Getting Started With OCP and the AWS Service Broker](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/getting-started.md)  
+[AWS Service Broker Overview](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/Overview.md)  
+[FAQ](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/FAQ.md)  
+[Troubleshooting](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/Troubleshooting.md)  
+
+## License
+
+This library is licensed under the Apache 2.0 License.
