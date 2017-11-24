@@ -18,6 +18,4 @@ BackupRetentionPeriod: 35
 ClusterType: multi-node
 # TODO: Build bucket into the template and remove this param
 LogBucketName: ''
-# TODO: set this to true once the issue with encryption is resolved
-# StorageEncrypted: true
-
+StorageEncrypted: true
