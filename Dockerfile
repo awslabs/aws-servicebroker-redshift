@@ -1,4 +1,4 @@
-FROM ansibleplaybookbundle/apb-base
+FROM ansibleplaybookbundle/apb-base:release-1.0
 MAINTAINER Ansible Playbook Bundle Community
 
 RUN yum -y install python-boto3 python-netaddr && yum clean all
