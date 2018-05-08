@@ -1,4 +1,0 @@
-LogBucketName: ''
-# once we have a way of getting ServiceInstance id and cluster hostname, this should change to:
-# application_name: "{{ cluster_hostname }}:{{ namespace }}:{{ apb_name }}:{{ _apb_plan_id }}:{{ service_instance_id }}"
-application_name: "{{ namespace }}::{{ _apb_plan_id }}"

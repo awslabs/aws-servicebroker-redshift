@@ -1,4 +1,0 @@
-# until we have a unique application_name make a hash out of the input params values
-# so you will not be able to have 2 ServiceInstances with the same settings in a project
-params_string: "{{ namespace }}::{{ _apb_plan_id }}::{{ aws_access_key }}::{{ aws_secret_key }}::{{ region }}::{{ NodeType }}::{{ NumberOfNodes }}::{{ VpcId }}::{{ PubliclyAccessible }}::{{ AccessCidr }}::{{ StorageEncrypted }}::{{ UseElasticIP }}::{{ PreferredMaintenanceWindowDay }}::{{ PreferredMaintenanceWindowStartTime }}::{{ PreferredMaintenanceWindowEndTime }}"
-params_hash: "{{ params_string | checksum }}"
